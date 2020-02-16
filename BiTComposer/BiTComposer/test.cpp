@@ -2,6 +2,11 @@
 #include "bitalino.h"
 
 #include <stdio.h>
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+
 
 #ifdef _WIN32
 
@@ -35,18 +40,22 @@ int main()
 {
    try
    {
+       cout << "Salut Eva ! Je lance la recherche Bluetooth...\n";
+
       // uncomment this block to search for Bluetooth devices (Windows and Linux)
-      /*
-      BITalino::VDevInfo devs = BITalino::find();   
+      
+      BITalino::VDevInfo devs = BITalino::find();
+      
+
       for(int i = 0; i < devs.size(); i++)
       	printf("%s - %s\n", devs[i].macAddr.c_str(), devs[i].name.c_str());
-      return 0;
-      */
+      //return 0;
+      
 
       puts("Connecting to device...");
       
       // use one of the lines below
-      BITalino dev("98:D3:31:B2:11:6B");  // device MAC address (Windows and Linux)
+      BITalino dev("20:15:05:29:22:22");  // device MAC address (Windows and Linux)
       
       //BITalino dev("COM5");  // Bluetooth virtual COM port or USB-UART COM port (Windows)
       
@@ -63,7 +72,8 @@ int main()
 
       dev.battery(10);  // set battery threshold (optional)
 
-      dev.start(1000, {0, 1, 2, 3, 4, 5});   // start acquisition of all channels at 1000 Hz
+      //dev.start(100, {0, 1, 2, 3, 4, 5});   // start acquisition of all channels at 1000 Hz
+      dev.start(1000, {0});
       // use block below if your compiler doesn't support vector initializer lists
       /*
       BITalino::Vint chans;
@@ -88,15 +98,43 @@ int main()
       dev.trigger(outputs);
       */
 
-      BITalino::VFrame frames(100); // initialize the frames vector with 100 frames 
+      BITalino::VFrame frames(10); // initialize the frames vector with 100 frames PLUS OU MOINS VITE
+      int deltaTemps = 0;
       do
       {
          dev.read(frames); // get 100 frames from device
          const BITalino::Frame &f = frames[0];  // get a reference to the first frame of each 100 frames block
-         printf("%d : %d %d %d %d ; %d %d %d %d %d %d\n",   // dump the first frame
+         /*printf("%d : %d %d %d %d ; %d %d %d %d %d %d\n",   // dump the first frame
                 f.seq,
                 f.digital[0], f.digital[1], f.digital[2], f.digital[3],
-                f.analog[0], f.analog[1], f.analog[2], f.analog[3], f.analog[4], f.analog[5]);
+                f.analog[0], f.analog[1], f.analog[2], f.analog[3], f.analog[4], f.analog[5]);*/
+
+         //--------------------------MANIPULATIONS----------------------------------------------
+
+         deltaTemps++;
+
+         //COUPS    
+         /*const BITalino::Frame& f2 = frames[1]; //deuxieme mesure
+         if ((f.analog[0] != f2.analog[0]) && deltaTemps > 20) {
+             puts("--------------------------------YOU HIT IT !");
+             deltaTemps = 0;
+         }*/
+
+         //ACCELERATION VERTICALE (MODULE ACC A PLAT)    
+         const BITalino::Frame& f2 = frames[1];
+         if ((abs(f.analog[0] - f2.analog[0]) > 40) && deltaTemps > 20) {
+             puts("--------------------------------YOU HIT IT !");
+             deltaTemps = 0;
+         }
+
+
+
+         //--------------------------MANIPULATIONS----------------------------------------------
+         printf("%d ; %d %d\n",   // dump the first frame
+             f.seq,
+             f.analog[0], f2.analog[1]);
+         
+
 
       } while (!keypressed()); // until a key is pressed
 
