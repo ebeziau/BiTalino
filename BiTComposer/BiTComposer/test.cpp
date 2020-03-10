@@ -73,7 +73,7 @@ int main()
       dev.battery(10);  // set battery threshold (optional)
 
       //dev.start(100, {0, 1, 2, 3, 4, 5});   // start acquisition of all channels at 1000 Hz
-      dev.start(1000, {0});
+      dev.start(1000, {0}); //Channel A1
       // use block below if your compiler doesn't support vector initializer lists
       /*
       BITalino::Vint chans;
@@ -100,10 +100,16 @@ int main()
 
       BITalino::VFrame frames(10); // initialize the frames vector with 100 frames PLUS OU MOINS VITE
       int deltaTemps = 0;
-      do
+      do //A CHAQUE do ON PREND UN NOUVEAU VECTEUR DE FRAMES
       {
          dev.read(frames); // get 100 frames from device
          const BITalino::Frame &f = frames[0];  // get a reference to the first frame of each 100 frames block
+         const BITalino::Frame &f2 = frames[1]; //deuxieme mesure
+
+         //pour atteindre directement la mesure qu'on veut
+         const int& mes1 = f.analog[0];
+         const int& mes2 = f2.analog[0];
+
          /*printf("%d : %d %d %d %d ; %d %d %d %d %d %d\n",   // dump the first frame
                 f.seq,
                 f.digital[0], f.digital[1], f.digital[2], f.digital[3],
@@ -114,25 +120,35 @@ int main()
          deltaTemps++;
 
          //COUPS    
-         /*const BITalino::Frame& f2 = frames[1]; //deuxieme mesure
-         if ((f.analog[0] != f2.analog[0]) && deltaTemps > 20) {
+         /*if ((f.analog[0] != f2.analog[0]) && deltaTemps > 20) {
              puts("--------------------------------YOU HIT IT !");
              deltaTemps = 0;
          }*/
 
-         //ACCELERATION VERTICALE (MODULE ACC A PLAT)    
-         const BITalino::Frame& f2 = frames[1];
-         if ((abs(f.analog[0] - f2.analog[0]) > 40) && deltaTemps > 20) {
+         //ACCELERATION VERTICALE (MODULE ACC A PLAT)
+         /*if ((abs(f.analog[0] - f2.analog[0]) > 40) && deltaTemps > 20) {
              puts("--------------------------------YOU HIT IT !");
              deltaTemps = 0;
-         }
+         }*/
 
 
 
          //--------------------------MANIPULATIONS----------------------------------------------
-         printf("%d ; %d %d\n",   // dump the first frame
-             f.seq,
-             f.analog[0], f2.analog[1]);
+
+
+         //affichage des 2 premières frames d'un bloc
+         /*printf("%d %d ; %d %d\n",   // dump the first frame
+             f.seq, f2.seq,
+             f.analog[0], f2.analog[0]);*/
+
+         //affichage en continu (changement d'affichage si changement dans la mesure (mouvement))
+         int precedent = f.analog[0];
+         for (BITalino::Frame mesure : frames) {
+             if (mesure.analog[0] != precedent) {
+                 printf("%d \n", mesure.analog[0]);
+                 precedent = mesure.analog[0];
+             }
+         }
          
 
 
