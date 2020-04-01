@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
+#include "fmod\fmod.h"
+#include <fmod_common.h>
 using namespace std;
 
 
@@ -20,6 +22,7 @@ bool keypressed(void)
 #else // Linux or Mac OS
 
 #include <sys/select.h>
+#include "fmod/fmod_common.h"
 
 bool keypressed(void)
 {
@@ -40,6 +43,33 @@ int main()
 {
    try
    {
+
+
+       //-------------------------------Jouer un son-----------------------------
+
+       
+       FMOD_SYSTEM* system;
+       FMOD_System_Create(&system);
+       FMOD_System_Init(system, 2, FMOD_INIT_NORMAL, NULL);
+
+       FMOD_SOUND* tir = NULL;
+       FMOD_System_CreateSound(system, "pan.wav", FMOD_CREATESAMPLE, 0, &tir);
+
+       //FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, tir, 0, NULL);
+
+
+       FMOD_Sound_Release(tir);
+
+
+
+       FMOD_System_Close(system);
+       FMOD_System_Release(system);
+
+
+
+       //------------------------------------------------------------------------
+
+
        cout << "Salut Eva ! Je lance la recherche Bluetooth...\n";
 
       // uncomment this block to search for Bluetooth devices (Windows and Linux)
@@ -115,7 +145,7 @@ int main()
                 f.digital[0], f.digital[1], f.digital[2], f.digital[3],
                 f.analog[0], f.analog[1], f.analog[2], f.analog[3], f.analog[4], f.analog[5]);*/
 
-         //--------------------------MANIPULATIONS----------------------------------------------
+         //--------------------------COUPS----------------------------------------------
 
          deltaTemps++;
 
@@ -133,7 +163,7 @@ int main()
 
 
 
-         //--------------------------MANIPULATIONS----------------------------------------------
+         //--------------------------AFFICHAGE----------------------------------------------
 
 
          //affichage des 2 premières frames d'un bloc
@@ -149,6 +179,7 @@ int main()
                  precedent = mesure.analog[0];
              }
          }
+
          
 
 
