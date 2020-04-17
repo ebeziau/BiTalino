@@ -1,11 +1,2 @@
-﻿Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Fatal(char const *,...)" (?Common_Fatal@@YAXPEBDZZ) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Draw(char const *,...)" (?Common_Draw@@YAXPEBDZZ) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl ERRCHECK_fn(enum FMOD_RESULT,char const *,int)" (?ERRCHECK_fn@@YAXW4FMOD_RESULT@@PEBDH@Z) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Init(void * *)" (?Common_Init@@YAXPEAPEAX@Z) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Close(void)" (?Common_Close@@YAXXZ) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Update(void)" (?Common_Update@@YAXXZ) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "void __cdecl Common_Sleep(unsigned int)" (?Common_Sleep@@YAXI@Z) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "bool __cdecl Common_BtnPress(enum Common_Button)" (?Common_BtnPress@@YA_NW4Common_Button@@@Z) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "char const * __cdecl Common_BtnStr(enum Common_Button)" (?Common_BtnStr@@YAPEBDW4Common_Button@@@Z) référencé dans la fonction main
-Programme.obj : error LNK2019: symbole externe non résolu "char const * __cdecl Common_MediaPath(char const *)" (?Common_MediaPath@@YAPEBDPEBD@Z) référencé dans la fonction main
-C:\BiTalino\BiTComposer\x64\Debug\BiTComposer.exe : fatal error LNK1120: 10 externes non résolus
+﻿  Programme.cpp
+  BiTComposer.vcxproj -> C:\BiTalino\BiTComposer\x64\Debug\BiTComposer.exe
