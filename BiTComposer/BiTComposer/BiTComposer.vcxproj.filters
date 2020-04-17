@@ -18,7 +18,10 @@
     <ClCompile Include="bitalino.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="Acquisition.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Programme.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +29,22 @@
     <ClInclude Include="bitalino.h">
       <Filter>Fichiers sources</Filter>
     </ClInclude>
+    <ClInclude Include="fmod\common.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Media Include="pan.wav">
       <Filter>Fichiers de ressources</Filter>
     </Media>
+    <Media Include="grease.wav">
+      <Filter>Fichiers de ressources</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll" />
+    <None Include="fmodL.dll" />
+    <None Include="fmodstudioL.dll" />
+    <None Include="fmodstudio.dll" />
   </ItemGroup>
 </Project>

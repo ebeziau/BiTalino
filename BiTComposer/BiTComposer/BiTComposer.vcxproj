@@ -19,17 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Acquisition.cpp" />
     <ClCompile Include="bitalino.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="Programme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitalino.h" />
+    <ClInclude Include="fmod\common.h" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="grease.wav" />
     <Media Include="pan.wav">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fmod.dll" />
+    <None Include="fmodL.dll" />
+    <None Include="fmodstudio.dll" />
+    <None Include="fmodstudioL.dll" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
