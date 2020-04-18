@@ -201,13 +201,15 @@ int main()
         int deltaTemps = 0;
 
         //Acquisition acquisition;
-        int _maxCalibration(340);
-        int _minCalibration(140);
+        //int _maxCalibration(312);
+        //int _minCalibration(208);
+        int _maxCalibration(0);
+        int _minCalibration(500);
 
-        /*puts("\n----------------------------CALIBRATION----------------------------------\n");
+        puts("\n----------------------------CALIBRATION----------------------------------\n");
         //acquisition.calibration(dev, frames);
 
-        puts("2Nous allons proceder a la calibration. Tendez votre bras, paume vers l'exterieur, et ne bougez plus.");
+        puts("Nous allons proceder a la calibration. Tendez votre bras, paume vers l'exterieur, et ne bougez plus.");
         puts("Quand vous etes prets, appuyez sur la touche Entree.\n\n");
 
         cin.ignore(300, '\n');
@@ -223,12 +225,12 @@ int main()
             int max = f0.analog[0];
             int min = f0.analog[0];
 
-            for (BITalino::Frame mesure : frames) {
-                if (mesure.analog[0] > max) {
-                    max = mesure.analog[0];
+            for (BITalino::Frame vecteur : frames) {
+                if (vecteur.analog[0] > max) {
+                    max = vecteur.analog[0];
                 }
-                if (mesure.analog[0] < min) {
-                    min = mesure.analog[0];
+                if (vecteur.analog[0] < min) {
+                    min = vecteur.analog[0];
                 }
             }
             if (max > _maxCalibration) {
@@ -241,7 +243,13 @@ int main()
 
         _getch();
 
-        puts("Calibration effectuee  !\n");*/
+        //retour aux valeurs par défaut si problème
+        if ((_maxCalibration > 350)||(_minCalibration < 150)) {
+            _maxCalibration = 312;
+            _minCalibration = 208;
+        }
+
+        puts("Calibration effectuee  !\n");
         cout << "max : " << _maxCalibration << endl;
         cout << "min : " << _minCalibration << endl;
 
@@ -258,38 +266,111 @@ int main()
         int valeurAbs;
         double MAX_GLOBAL = -5;
         double MIN_GLOBAL = 5;
+        //int maxMesureVecteur = 0;
+        int moyenneMesureVecteur = 0;
+        int nombreMesuresVecteur = 0;
 
-        int verif = 1;
+        int time = 0;
+        //bool applatisseur = true;
+        //int verif = 1;
+        int precedent = 300;
+
         do {
             dev.read(frames);
-            const BITalino::Frame f0 = frames[0];
-            const BITalino::Frame f1 = frames[1];
+            const BITalino::Frame f0 = frames[0]; //PREMIER VECTEUR DU TABLEAU
+            //const BITalino::Frame f1 = frames[1];
 
-            //printf("f0.analog[0] : %d", f0.analog[0]);            
+            //printf("%d \n", vecteur.analog[0]); //vecteur analogique de l'accelerometre
+            //printf("%lf \n\n", valeurEnG); //vecteur en G.
+            //printf("valeur absolue : %d \n", valeurAbs); //ecart entre 2 valeurs
 
-            //affichage en continu (changement d'affichage si changement dans la mesure (mouvement))
-            int precedent = f0.analog[0];
-            for (BITalino::Frame mesure : frames)
+
+            //affichage en continu (changement d'affichage si changement dans la vecteur (mouvement))
+            
+            
+            
+            //int precedent = f0.analog[0];
+            /*for (int mesure : f0.analog) {
+                moyenneMesureVecteur += mesure;
+                nombreMesuresVecteur++;
+                printf("%d ", mesure);
+            }
+            moyenneMesureVecteur = moyenneMesureVecteur / nombreMesuresVecteur;
+            int precedent = moyenneMesureVecteur;
+            printf("\nMoyenne : %d \n", moyenneMesureVecteur);
+            printf("Nombre Mesure par Vecteur : %d \n", nombreMesuresVecteur);
+            moyenneMesureVecteur = 0;        
+            nombreMesuresVecteur = 0;*/
+            
+            
+            for (BITalino::Frame vecteur : frames) // VECTEUR
             {
-                valeurAbs = abs(mesure.analog[0] - precedent);
+                /*maxMesureVecteur = vecteur.analog[0]; //PREMIERE MESURE DU VECTEUR
+                for (int mesure : vecteur.analog) {
+                    if (mesure > maxMesureVecteur) {
+                        maxMesureVecteur = mesure; //VALEUR MAX DU VECTEUR
+                    }
+                }*/
 
-                printf("valeur absolue : %d \n", valeurAbs); //ecart entre 2 valeurs
-                valeurEnG = (2 * ((double)mesure.analog[0] - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
-                printf("%d \n", mesure.analog[0]); //mesure analogique de l'accelerometre
-                printf("%lf \n\n", valeurEnG); //mesure en G.
-
-                if (valeurAbs > 10)
-                {
-
-                    precedent = mesure.analog[0];
+                /*for (int mesure : vecteur.analog) {
+                    moyenneMesureVecteur += mesure;
+                    nombreMesuresVecteur++;
                 }
+                moyenneMesureVecteur = moyenneMesureVecteur / nombreMesuresVecteur; // en int*/
 
+                valeurAbs = abs(vecteur.analog[0] - precedent);
+                //valeurAbs = abs(maxMesureVecteur - precedent);
+                //valeurAbs = abs(moyenneMesureVecteur - precedent);
+                valeurEnG = (2 * ((double)vecteur.analog[0] - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
+                //valeurEnG = (2 * ((double)maxMesureVecteur - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
+                //valeurEnG = (2 * ((double)moyenneMesureVecteur - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
+
+                //printf("valeur analog : %d \n", vecteur.analog[0]);
+                //printf("valeur precedent : %d \n", precedent);
+                //printf("valeur absolue : %d \n\n", valeurAbs);
+
+                //printf("valeur en g : %lf \n\n", valeurEnG);
+
+
+
+
+                //test répercussions du dernier mouvement sont passées
+                /*if (valeurAbs < 10) {
+                    applatisseur = true;
+                }*/               
+                
+                //pour debug : affiche à chaque fois que la valeur(acc) change
+                /*if (vecteur.analog[0] != precedent) {
+                    printf("Vecteur analog : %d \n", vecteur.analog[0]);
+                    //precedent = vecteur.analog[0];
+                }*/
+
+                if (time > 100 && ((valeurAbs > 5) && (valeurAbs < 11)))
+                {
+                    //precedent = maxMesureVecteur;
+                    //precedent = vecteur.analog[0];                    
+                    printf("valeur absolue : %d \n", valeurAbs);
+                    printf("-------------------------------------------------SMOOTH MOVE\n\n");
+                    time = 0;
+                }
+                if (time > 100 && (valeurAbs >= 11))
+                {
+                    //precedent = vecteur.analog[0];
+                    //precedent = maxMesureVecteur;
+                    printf("valeur absolue : %d \n", valeurAbs);
+                    printf("---------------------------------------------------HARD MOVE\n\n");
+                    time = 0;
+                }
+                /*precedent = moyenneMesureVecteur;
+                moyenneMesureVecteur = 0;
+                nombreMesuresVecteur = 0;*/
+                precedent = vecteur.analog[0];
                 if (MAX_GLOBAL < valeurEnG) MAX_GLOBAL = valeurEnG;
                 if (MIN_GLOBAL > valeurEnG) MIN_GLOBAL = valeurEnG;
             }
 
-
-            verif = verif + 1;
+            time = time + 1;
+            //verif = verif + 1;
         }while (!_kbhit());
 
         //cout << verif << endl;

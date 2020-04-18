@@ -517,7 +517,7 @@ int BITalino::read(VFrame &frames)
 
    unsigned char buffer[8]; // frame maximum size is 8 bytes
 
-   if (frames.empty())   frames.resize(100);
+   if (frames.empty())   frames.resize(10);
 
    char nBytes = nChannels + 2;
    if (nChannels >= 3 && nChannels <= 5)  nBytes++;
