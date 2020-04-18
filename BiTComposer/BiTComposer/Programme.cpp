@@ -6,16 +6,10 @@
 #include <stdlib.h>
 #include "fmod\fmod.h"
 #include "fmod\fmod_common.h"
-#include "Acquisition.cpp"
 using namespace std;
 #include <conio.h>
 
-//#include "fmod_studio.hpp"
-//#include "fmod_studio_common.h"
-//#include "fmod_errors.h"
-//#include "common.h"
-
-void fi()
+void fmodEssais()
 {
     // ------------------------------ - Jouer un son----------------------------
 
@@ -197,17 +191,10 @@ int main()
         dev.start(1000, { 0 }); //Channel A1        
 
         BITalino::VFrame frames(10); // initialize the frames vector with 10 frames PLUS OU MOINS VITE
-        
-        int deltaTemps = 0;
-
-        //Acquisition acquisition;
-        //int _maxCalibration(312);
-        //int _minCalibration(208);
-        int _maxCalibration(0);
-        int _minCalibration(500);
+               
 
         puts("\n----------------------------CALIBRATION----------------------------------\n");
-        //acquisition.calibration(dev, frames);
+        
 
         puts("Nous allons proceder a la calibration. Tendez votre bras, paume vers l'exterieur, et ne bougez plus.");
         puts("Quand vous etes prets, appuyez sur la touche Entree.\n\n");
@@ -217,10 +204,12 @@ int main()
         puts("Effectuez DOUCEMENT une rotation de votre poignet a 360 degres.");
         puts("Quand c'est fait, appuyez sur une touche du clavier\n\n");
 
+        int _maxCalibration(0);
+        int _minCalibration(500);
+
         do {
             dev.read(frames);
             const BITalino::Frame f0 = frames[0];
-            //const BITalino::Frame f1 = frames[1];
 
             int max = f0.analog[0];
             int min = f0.analog[0];
@@ -256,131 +245,77 @@ int main()
 
 
         puts("\n--------------------------------PLAY-----------------------------------------\n");
-        //acquisition.play(dev, frames);        
-        //puts("Sortie Playy\n");
-
-        puts("La musique va commencer ! Appuie sur Entree quand vous etes pret.\n");
+        
+        puts("La seance va commencer ! Appuie sur Entree quand vous etes pret.\n");
         cin.ignore(300, '\n');
 
         double valeurEnG;
         int valeurAbs;
         double MAX_GLOBAL = -5;
         double MIN_GLOBAL = 5;
-        //int maxMesureVecteur = 0;
-        int moyenneMesureVecteur = 0;
-        int nombreMesuresVecteur = 0;
-
         int time = 0;
         //bool applatisseur = true;
-        //int verif = 1;
+
         int precedent = 300;
 
         do {
-            dev.read(frames);
-            const BITalino::Frame f0 = frames[0]; //PREMIER VECTEUR DU TABLEAU
-            //const BITalino::Frame f1 = frames[1];
+            dev.read(frames); //UN TABLEAU DE VECTEUR
+            
+            
+            //-----------Explication des variables----------------------------------
+                        
+            /*
+            frames : tableau de vecteurs
+            const BITalino::Frame vecteur0 = frames[0] : premier vecteur du tableau
+            vecteur0.analog[0] //valeur analogique du premier vecteur (une seule valeur par vecteur)
+            */
 
-            //printf("%d \n", vecteur.analog[0]); //vecteur analogique de l'accelerometre
-            //printf("%lf \n\n", valeurEnG); //vecteur en G.
-            //printf("valeur absolue : %d \n", valeurAbs); //ecart entre 2 valeurs
-
-
-            //affichage en continu (changement d'affichage si changement dans la vecteur (mouvement))
-            
-            
-            
-            //int precedent = f0.analog[0];
-            /*for (int mesure : f0.analog) {
-                moyenneMesureVecteur += mesure;
-                nombreMesuresVecteur++;
-                printf("%d ", mesure);
-            }
-            moyenneMesureVecteur = moyenneMesureVecteur / nombreMesuresVecteur;
-            int precedent = moyenneMesureVecteur;
-            printf("\nMoyenne : %d \n", moyenneMesureVecteur);
-            printf("Nombre Mesure par Vecteur : %d \n", nombreMesuresVecteur);
-            moyenneMesureVecteur = 0;        
-            nombreMesuresVecteur = 0;*/
-            
+            //-----------------------------------------------------------------------
+      
             
             for (BITalino::Frame vecteur : frames) // VECTEUR
-            {
-                /*maxMesureVecteur = vecteur.analog[0]; //PREMIERE MESURE DU VECTEUR
-                for (int mesure : vecteur.analog) {
-                    if (mesure > maxMesureVecteur) {
-                        maxMesureVecteur = mesure; //VALEUR MAX DU VECTEUR
-                    }
-                }*/
-
-                /*for (int mesure : vecteur.analog) {
-                    moyenneMesureVecteur += mesure;
-                    nombreMesuresVecteur++;
-                }
-                moyenneMesureVecteur = moyenneMesureVecteur / nombreMesuresVecteur; // en int*/
-
+            {                
                 valeurAbs = abs(vecteur.analog[0] - precedent);
-                //valeurAbs = abs(maxMesureVecteur - precedent);
-                //valeurAbs = abs(moyenneMesureVecteur - precedent);
                 valeurEnG = (2 * ((double)vecteur.analog[0] - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
-                //valeurEnG = (2 * ((double)maxMesureVecteur - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
-                //valeurEnG = (2 * ((double)moyenneMesureVecteur - (double)_minCalibration) / ((double)_maxCalibration - (double)_minCalibration)) - 1;
+                
 
-                //printf("valeur analog : %d \n", vecteur.analog[0]);
-                //printf("valeur precedent : %d \n", precedent);
-                //printf("valeur absolue : %d \n\n", valeurAbs);
-
-                //printf("valeur en g : %lf \n\n", valeurEnG);
-
-
-
-
-                //test répercussions du dernier mouvement sont passées
+                //test : les rebonds du dernier mouvement sont passés (méthode non retenue, voir rapport)
                 /*if (valeurAbs < 10) {
                     applatisseur = true;
                 }*/               
                 
-                //pour debug : affiche à chaque fois que la valeur(acc) change
+                //affichage (pour debug) : affiche à chaque fois que la valeur(acc) change
                 /*if (vecteur.analog[0] != precedent) {
                     printf("Vecteur analog : %d \n", vecteur.analog[0]);
-                    //precedent = vecteur.analog[0];
                 }*/
 
                 if (time > 100 && ((valeurAbs > 5) && (valeurAbs < 11)))
-                {
-                    //precedent = maxMesureVecteur;
-                    //precedent = vecteur.analog[0];                    
-                    printf("valeur absolue : %d \n", valeurAbs);
+                {                
+                    printf("valeur absolue (force) : %d \n", valeurAbs);
                     printf("-------------------------------------------------SMOOTH MOVE\n\n");
                     time = 0;
                 }
                 if (time > 100 && (valeurAbs >= 11))
                 {
-                    //precedent = vecteur.analog[0];
-                    //precedent = maxMesureVecteur;
-                    printf("valeur absolue : %d \n", valeurAbs);
+                    printf("valeur absolue (force) : %d \n", valeurAbs);
                     printf("---------------------------------------------------HARD MOVE\n\n");
                     time = 0;
                 }
-                /*precedent = moyenneMesureVecteur;
-                moyenneMesureVecteur = 0;
-                nombreMesuresVecteur = 0;*/
                 precedent = vecteur.analog[0];
                 if (MAX_GLOBAL < valeurEnG) MAX_GLOBAL = valeurEnG;
                 if (MIN_GLOBAL > valeurEnG) MIN_GLOBAL = valeurEnG;
             }
-
             time = time + 1;
-            //verif = verif + 1;
         }while (!_kbhit());
 
-        //cout << verif << endl;
 
-        printf("MAX_GLOBAL : %lf \n", MAX_GLOBAL);
-        printf("MIN_GLOBAL : %lf \n", MIN_GLOBAL);
+
+        printf("\n\nMAX_GLOBAL (en g): %lf \n", MAX_GLOBAL);
+        printf("MIN_GLOBAL (en g): %lf \n", MIN_GLOBAL);
 
 
         dev.stop(); // stop acquisition
-        puts("Merci d'avoir participe !\n");
+        puts("\nMerci d'avoir participe !\n");
 
     }
     catch (BITalino::Exception &e)

@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Acquisition.cpp" />
     <ClCompile Include="bitalino.cpp" />
     <ClCompile Include="Programme.cpp" />
   </ItemGroup>
