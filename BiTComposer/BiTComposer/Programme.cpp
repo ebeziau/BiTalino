@@ -172,7 +172,7 @@ int main()
     
     try
     {
-        cout << "Salut Eva ! Je lance la recherche Bluetooth...\n";
+        cout << "\nSalut ! Je lance la recherche Bluetooth...\n\n";
 
         BITalino::VDevInfo devs = BITalino::find();
         for (int i = 0; i < devs.size(); i++) {
@@ -201,7 +201,7 @@ int main()
 
         cin.ignore(300, '\n');
 
-        puts("Effectuez DOUCEMENT une rotation de votre poignet a 360 degres.");
+        puts("Effectuez DOUCEMENT une rotation du capteur a 360 degres.");
         puts("Quand c'est fait, appuyez sur une touche du clavier\n\n");
 
         int _maxCalibration(0);
@@ -246,7 +246,7 @@ int main()
 
         puts("\n--------------------------------PLAY-----------------------------------------\n");
         
-        puts("La seance va commencer ! Appuie sur Entree quand vous etes pret.\n");
+        puts("La seance va commencer ! Appuyez sur Entree quand vous etes pret.e.\n");
         cin.ignore(300, '\n');
 
         double valeurEnG;
